@@ -514,7 +514,7 @@ MonoBehaviour:
   BlockingConditionStates: 
   BlockingWeaponStates: 
   _inputManager: {fileID: 0}
-  InitialWeapon: {fileID: 7623872680269275094, guid: 30a1ea17e83289144a4fa112ffeb133a,
+  InitialWeapon: {fileID: 7623872680269275094, guid: 1e1eb6e34ab2ef649b69c60bd2e37e51,
     type: 3}
   CanPickupWeapons: 1
   WeaponUseFeedback: {fileID: 0}

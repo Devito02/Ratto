@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: b6eed49204c2c2d438e33586aa1f2fbb
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 157716
+  packageName: Hierarchy Folders
+  packageVersion: 1.2.9
+  assetPath: Packages/com.sisus.shared/Editor/ColorPickerUtility.cs
+  uploadId: 718528

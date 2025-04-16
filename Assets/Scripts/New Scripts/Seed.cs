@@ -1,19 +1,25 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class Seed : MonoBehaviour
 {
-    public enum SeedElement
-    {
-        Fire,
-        Water,
-        Air,
-        Earth
-    }
+    
     public string Name;
-    public SeedElement Element;
+    public Projectile_Elements Element;
     public float Speed;
     public float DurationTime;
     public float Damage;
+
+    public Seed CopySeed(Projectile_Elements projectile_Elements)
+    {
+        Seed seed = new Seed();
+        seed.Name = Name;
+        seed.Speed = Speed;
+        seed.DurationTime = DurationTime;
+        seed.Damage = Damage;
+        seed.CopySeed(projectile_Elements);
+        return seed;
+    }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {

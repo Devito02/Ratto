@@ -7,6 +7,8 @@ public class Seed_Launcher : ProjectileWeapon
 {
     protected InputManager _inputManager;
     public Seed_Holder seed_Holder;
+    public Projectile_Mixer projectile_Mixer;
+
     [Tooltip("the object pooler used to spawn projectiles, if left empty, this component will try to find one on its game object")]
     public MMMultipleObjectPooler MMObjectPooler;
 
@@ -15,20 +17,21 @@ public class Seed_Launcher : ProjectileWeapon
         base.Initialization();
         _inputManager = Owner.LinkedInputManager;
         seed_Holder = Owner.GetComponent<Seed_Holder>();
+        projectile_Mixer = Owner.GetComponent<Projectile_Mixer>();
     }
 
     public override void WeaponUse()
     {
         if (seed_Holder.IsEmpty) return;
-        Seed _seed = null;
+        ElementalProjectile _seed = null;
 
 
         if (_inputManager.SecondaryShootButton.State.CurrentState == MMInput.ButtonStates.ButtonPressed)
         {
-            _seed = seed_Holder.GiveSeed(1);
+            _seed = projectile_Mixer.GetProjectilePref(seed_Holder.GiveSeed(1));
         }
         else
-            _seed = seed_Holder.GiveSeed(0);
+            _seed = projectile_Mixer.GetProjectilePref(seed_Holder.GiveSeed(0));
 
 
         DetermineSpawnPosition();
@@ -40,31 +43,28 @@ public class Seed_Launcher : ProjectileWeapon
         }
     }
 
-    public  Seed SpawnSeed(Vector3 spawnPosition, Seed seed , bool triggerObjectActivation = true)
+    public ElementalProjectile SpawnSeed(Vector3 spawnPosition, ElementalProjectile projSo , bool triggerObjectActivation = true)
     {
         /// we get the next object in the pool and make sure it's not null
         //Seed NextSeed = MMObjectPooler.GetPooledGameObjectOfType(seed.Name).GetComponent<Seed>();
-        Seed NextSeed = seed;
+        ElementalProjectile NextProj = Instantiate(projSo);
         if (OverrideSpeed > 0)
-            NextSeed.GetComponent<Projectile>().Speed = OverrideSpeed;
+            NextProj.Speed = OverrideSpeed;
         if (DoesOverrideLayerMask)
-            NextSeed.GetComponent<DamageOnTouch>().TargetLayerMask = OverridingMask;
+            NextProj.GetComponent<DamageOnTouch>().TargetLayerMask = OverridingMask;
 
         // mandatory checks
-        if (NextSeed == null) { return null; }
-        if (NextSeed.GetComponent<MMPoolableObject>() == null)
-        {
-            throw new Exception(gameObject.name + " is trying to spawn objects that don't have a PoolableObject component.");
-        }
+        if (NextProj == null) { return null; }
+
         // we position the object
-        NextSeed.transform.position = spawnPosition;
+        NextProj.transform.position = spawnPosition;
         if (_projectileSpawnTransform != null)
         {
-            NextSeed.transform.position = _projectileSpawnTransform.position;
+            NextProj.transform.position = _projectileSpawnTransform.position;
         }
         // we set its direction
 
-        Projectile projectile = NextSeed.GetComponent<Projectile>();
+        Projectile projectile = NextProj.GetComponent<Projectile>();
 
         if (projectile != null)
         {
@@ -74,8 +74,6 @@ public class Seed_Launcher : ProjectileWeapon
                 projectile.SetOwner(Owner.gameObject);
             }
         }
-        // we activate the object
-        NextSeed.gameObject.SetActive(true);
 
         if (projectile != null)
         {
@@ -121,12 +119,12 @@ public class Seed_Launcher : ProjectileWeapon
 
         if (triggerObjectActivation)
         {
-            if (NextSeed.GetComponent<MMPoolableObject>() != null)
+            if (NextProj.GetComponent<MMPoolableObject>() != null)
             {
-                NextSeed.GetComponent<MMPoolableObject>().TriggerOnSpawnComplete();
+                NextProj.GetComponent<MMPoolableObject>().TriggerOnSpawnComplete();
             }
         }
-        return (NextSeed);
+        return (NextProj);
     }
 
 

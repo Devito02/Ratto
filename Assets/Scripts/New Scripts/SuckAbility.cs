@@ -129,10 +129,10 @@ public class SuckAbility : CharacterAbility
                 {
                     //if the projectile was sent by the same character who is trying to suck it reject it
                     if (_proj.GetOwner() == _character.gameObject) return;
-                    Seed _seed = _proj.GetComponent<Seed>();
+                    ElementalProjectile _seed = _proj.GetComponent<ElementalProjectile>();
                     if (!_seed) return;
 
-                    seed_Holder.Ingest(_seed);
+                    seed_Holder.Ingest(_seed.Projectile_Element);
                     _proj.Destroy();
                 }
 
